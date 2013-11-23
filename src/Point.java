@@ -7,7 +7,7 @@ import java.util.Comparator;
 public class Point implements Comparable<Point> {
 
     // compare points by slope
-    public static final Comparator<Point> SLOPE_ORDER = new BySlope();       // YOUR DEFINITION HERE
+    public final Comparator<Point> SLOPE_ORDER = new BySlope();       // YOUR DEFINITION HERE
 
 
 
@@ -63,26 +63,21 @@ public class Point implements Comparable<Point> {
         return "(" + x + ", " + y + ")";
     }
 
-    public static class BySlope implements Comparator<Point> {
-        Point p0;
+    public class BySlope implements Comparator<Point> {
 
         @Override
         public int compare(Point p1, Point p2) {
-            double slope1 = p0.slopeTo(p1), slope2 = p0.slopeTo(p2);
+            double slope1 = Point.this.slopeTo(p1), slope2 = Point.this.slopeTo(p2);
 
             if (slope1 > slope2) return +1;
-            else if (slope1 < slope2) return -1;
-            else return 0;
+            if (slope1 < slope2) return -1;
+            return 0;
         }
     }
 
     // unit test
     public static void main(String[] args) {
-        Point[] points = new Point[10];
-
-        Arrays.sort(points, 1, points.length - 1, Point.SLOPE_ORDER);
-
-        //Then use this to start sort????
+       //Then use this to start sort????
     }
 
 	public int getX() {

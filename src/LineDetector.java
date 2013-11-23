@@ -6,25 +6,53 @@ import java.util.*;
 
 public class LineDetector {
 
-	/**
+    private ArrayList<SortedSet<Point>> lines;
+    private int count;
+    public LineDetector() {
+        lines = new ArrayList<SortedSet<Point>>();
+        count = 0;
+    }
+
+    /**
 	 * @param args
 	 */
 	public static void main(String[] args) {
 		LineDetector det = new LineDetector();
-        det.run("input80.txt");
-	}
+        det.run("points.txt");
+
+    }
 
     public void run(String a) {
         Point[] points = getPoints(a);
 
         for (int i = 0; i < points.length; i++) {
+
             points[i].draw();
-            ArrayList<SortedSet<Point>> lines = createLines(points[i], Arrays.copyOfRange(points, i + 1, points.length));
-            drawLines(lines);
+            List<SortedSet<Point>> theseLines = createLines(points[i], Arrays.copyOfRange(points, i + 1, points.length));
+
+            if (theseLines.size() > 0) lines.addAll(i, theseLines);
+            System.out.println(theseLines.size());
+        }
+
+        removeDups();
+        drawLines();
+        System.out.println("Line count is: " + lines.size());
+        System.out.println("Count is: " + count);
+    }
+
+    private void removeDups() {
+        for (int i = 0; i < lines.size(); i++) {
+            SortedSet<Point> ln = lines.get(i);
+            for (int j = i + 1; j < lines.size() - 1; j++) {
+                SortedSet<Point> lne = lines.get(j);
+                if (ln.containsAll(lne)) {
+                    lines.remove(lne);
+                }
+            }
         }
     }
 
-    private void drawLines(ArrayList<SortedSet<Point>> lines) {
+    private void drawLines() {
         for (int i = 0; i < lines.size(); i++) {
             SortedSet<Point> ln = lines.get(i);
 
@@ -36,34 +64,31 @@ public class LineDetector {
         }
     }
 
-    private ArrayList<SortedSet<Point>> createLines(Point p, Point[] rest) {
+    private List<SortedSet<Point>> createLines(Point p, Point[] rest) {
         Arrays.sort(rest, p.SLOPE_ORDER);
-        SortedSet<Point> line = new TreeSet<Point>(p.SLOPE_ORDER);
-        ArrayList<SortedSet<Point>> lines = new ArrayList<SortedSet<Point>>();
+        List<SortedSet<Point>> theseLines = new ArrayList<SortedSet<Point>>();
+        SortedSet<Point> line = new TreeSet<Point>();
         double slope1, slope2;
 
         for (int i = 0; i < rest.length; i++) {
+            line.add(p);
             line.add(rest[i]);
             slope1 = p.slopeTo(rest[i]);
             for (int j = i + 1; j < rest.length; j++) {
                 slope2 = p.slopeTo(rest[j]);
-                if (slope1 == slope2) line.add(rest[j]);
-            }
-            if (line.size() > 3) lines.add(line);
-            line.clear();
-        }
-
-        for (int i = 0; i < lines.size(); i++) {
-            SortedSet<Point> ln = lines.get(i);
-            for (int j = i + 1; j < lines.size() - 1; j++) {
-                SortedSet<Point> lne = lines.get(j);
-                if (ln.containsAll(lne)) {
-                    lines.remove(lne);
+                count++;
+                if (slope1 == slope2) {
+                    line.add(rest[j]);
+                    if (j == rest.length - 1) i = rest.length;
+                } else {
+                    i = j - 1;
+                    break;
                 }
             }
+            if (line.size() > 3) theseLines.add(line);
         }
 
-        return lines;
+        return theseLines;
 
     }
 
@@ -88,6 +113,15 @@ public class LineDetector {
             points[i] = new Point(x, y);
             i++;
         }
+
+        System.out.println("Number of points: " + n);
+        System.out.println("Max X: " + xMax);
+        System.out.println("Max Y: " + yMax);
+        System.out.println("Min X: " + xMin);
+        System.out.println("Max Y: " + yMin);
+
+        //System.out.println("Number of lines: " + lines.size());
+
 
         StdDraw.setXscale(xMin, xMax);
         StdDraw.setYscale(yMin, yMax);
