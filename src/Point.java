@@ -46,13 +46,13 @@ public class Point implements Comparable<Point> {
     // is this point lexicographically smaller than that one?
     // comparing y-coordinates and breaking ties by x-coordinates
     public int compareTo(Point that) {
-        /* YOUR CODE HERE */
         if ((this.y < that.y)) return -1;
 
         if (this.y == that.y) {
             if (this.x == that.x) return 0;
             if (this.x < that.x) return -1;
         }
+
         return +1;
     }
 
@@ -62,10 +62,12 @@ public class Point implements Comparable<Point> {
         return "(" + x + ", " + y + ")";
     }
 
-    public class BySlope implements Comparator<Point> {
+    public static class BySlope implements Comparator<Point> {
+        Point p0;
+
         @Override
         public int compare(Point p1, Point p2) {
-            double slope1 = Point.this.slopeTo(p1), slope2 = Point.this.slopeTo(p2);
+            double slope1 = p0.slopeTo(p1), slope2 = p0.slopeTo(p2);
 
             if (slope1 > slope2) return +1;
             else if (slope1 < slope2) return -1;
@@ -75,7 +77,11 @@ public class Point implements Comparable<Point> {
 
     // unit test
     public static void main(String[] args) {
-        /* YOUR CODE HERE */
+        Point.BySlope a = new Point.BySlope();
+
+        a.p0 = new Point(4,5);
+
+        //Then use this to start sort????
     }
 
 	public int getX() {
