@@ -24,13 +24,16 @@ public class LineDetector {
 
     public void run(String a) {
         Point[] points = getPoints(a);
-
+        Arrays.sort(points);
         for (int i = 0; i < points.length; i++) {
-
+            int j = 0;
             points[i].draw();
             List<SortedSet<Point>> theseLines = createLines(points[i], Arrays.copyOfRange(points, i + 1, points.length));
 
-            if (theseLines.size() > 0) lines.addAll(i, theseLines);
+            if (theseLines.size() > 0) {
+                lines.addAll(j, theseLines);
+                j++;
+            }
             System.out.println(theseLines.size());
         }
 
@@ -57,7 +60,7 @@ public class LineDetector {
             SortedSet<Point> ln = lines.get(i);
 
             ln.first().drawTo(ln.last());
-
+            System.out.println(ln.first() + " " + ln.last());
             for (Point p : ln) {
                 p.draw();
             }
@@ -67,10 +70,12 @@ public class LineDetector {
     private List<SortedSet<Point>> createLines(Point p, Point[] rest) {
         Arrays.sort(rest, p.SLOPE_ORDER);
         List<SortedSet<Point>> theseLines = new ArrayList<SortedSet<Point>>();
-        SortedSet<Point> line = new TreeSet<Point>();
+
         double slope1, slope2;
 
         for (int i = 0; i < rest.length; i++) {
+            SortedSet<Point> line = new TreeSet<Point>();
+            //System.out.println("Create Lines Method: " + line.size());
             line.add(p);
             line.add(rest[i]);
             slope1 = p.slopeTo(rest[i]);
@@ -85,7 +90,8 @@ public class LineDetector {
                     break;
                 }
             }
-            if (line.size() > 3) theseLines.add(line);
+            System.out.println("Create Lines Method: " + line.size());
+            if (line.size() > 2) theseLines.add(line);
         }
 
         return theseLines;
@@ -102,7 +108,10 @@ public class LineDetector {
         Point[] points = new Point[n];
 
         double xMin, xMax, yMin, yMax;
-        xMax = xMin = yMin = yMax = 0d;
+
+        xMax = yMax = Double.MIN_VALUE;
+        xMin = yMin = Double.MAX_VALUE;
+
         int i = 0;
         while (i < n) {
             int x = in.readInt(), y = in.readInt();
@@ -118,7 +127,7 @@ public class LineDetector {
         System.out.println("Max X: " + xMax);
         System.out.println("Max Y: " + yMax);
         System.out.println("Min X: " + xMin);
-        System.out.println("Max Y: " + yMin);
+        System.out.println("Min Y: " + yMin);
 
         //System.out.println("Number of lines: " + lines.size());
 
@@ -127,5 +136,4 @@ public class LineDetector {
         StdDraw.setYscale(yMin, yMax);
         return points;
     }
-
 }
