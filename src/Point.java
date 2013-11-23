@@ -1,12 +1,13 @@
 import edu.princeton.cs.introcs.StdDraw;
 
+import java.util.Arrays;
 import java.util.Comparator;
 
 
 public class Point implements Comparable<Point> {
 
     // compare points by slope
-    public final Comparator<Point> SLOPE_ORDER = new BySlope();       // YOUR DEFINITION HERE
+    public static final Comparator<Point> SLOPE_ORDER = new BySlope();       // YOUR DEFINITION HERE
 
 
 
@@ -77,9 +78,9 @@ public class Point implements Comparable<Point> {
 
     // unit test
     public static void main(String[] args) {
-        Point.BySlope a = new Point.BySlope();
+        Point[] points = new Point[10];
 
-        a.p0 = new Point(4,5);
+        Arrays.sort(points, 1, points.length - 1, Point.SLOPE_ORDER);
 
         //Then use this to start sort????
     }
