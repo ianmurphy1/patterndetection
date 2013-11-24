@@ -20,7 +20,7 @@ public class LineDetector {
 	 */
 	public static void main(String[] args) {
 		LineDetector det = new LineDetector();
-        det.run("input10.txt");
+        det.run("input56.txt");
     }
 
     public void run(String a) {
@@ -32,11 +32,12 @@ public class LineDetector {
             if (lns.size() > 0) lines.addAll(lns);
         }
 
-        //removeDups();
+        removeDups();
         drawLines();
     }
 
     private void removeDups() {
+
         for (int i = 0; i < lines.size(); i++) {
             ArrayList<Point> ln = lines.get(i);
             for (int j = i + 1; j < lines.size() - 1; j++) {
@@ -53,9 +54,11 @@ public class LineDetector {
         for (int i = 0; i < lines.size(); i++) {
             ArrayList<Point> ln = lines.get(i);
             Collections.min(ln).drawTo(Collections.max(ln));
+            StdOut.print(ln.size());
             for (Point p : ln) {
                     StdOut.print(p);
                     if (!p.equals(Collections.max(ln))) StdOut.print(" -> ");
+                    else StdOut.print("\n");
                     p.draw();
             }
         }
@@ -64,6 +67,11 @@ public class LineDetector {
     private ArrayList<ArrayList<Point>> createLines(Point p, Point[] points) {
         ArrayList<ArrayList<Point>> temps = new ArrayList<ArrayList<Point>>();
         Arrays.sort(points, p.SLOPE_ORDER);
+
+       // for (int i = 0; i < points.length; i++) {
+      //      System.out.println(p + "'s slope to " + points[i] + ": " + p.slopeTo(points[i]));
+       // }
+
         double slope1, slope2;
 
         for (int i = 0; i < points.length; i++) {
@@ -73,22 +81,29 @@ public class LineDetector {
             slope1 = p.slopeTo(points[i]);
             for (int j = i + 1; j < points.length; j++) {
                 slope2 = p.slopeTo(points[j]);
-                System.out.println(points[j]);
                 count++;
-                if (slope1 == slope2) line.add(points[j]);
+                if (slope1 == slope2) {
+                    //printLine(line);
+                    line.add(points[j]);
+                    if (j == points.length - 1) i = points.length;
+                } else {
+                    i = j - 1;
+                    break;
+                }
             }
-            if (line.size() > 2) temps.add(line);
+            if (line.size() > 3) {
+                //printLine(line);
+                temps.add(line);
+            }
         }
 
         return temps;
     }
 
     private void printLine(ArrayList<Point> line) {
-        Collections.sort(line);
         String s="";
         for(Point p : line) {
             s += p.toString() + " > ";
-
         }
         System.out.println(s);
         Collections.sort(line);
@@ -111,7 +126,6 @@ public class LineDetector {
 
         xMax = yMax = Double.MIN_VALUE;
         xMin = yMin = Double.MAX_VALUE;
-        double rad = StdDraw.getPenRadius();
 
         int i = 0;
         while (i < n) {
