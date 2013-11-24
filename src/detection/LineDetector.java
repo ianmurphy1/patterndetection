@@ -3,6 +3,7 @@ package detection;
 import edu.princeton.cs.introcs.In;
 import edu.princeton.cs.introcs.StdDraw;
 import edu.princeton.cs.introcs.StdOut;
+import edu.princeton.cs.introcs.Stopwatch;
 
 import java.util.*;
 
@@ -21,17 +22,19 @@ public class LineDetector {
 	 */
 	public static void main(String[] args) {
         LineDetector det = new LineDetector();
-        det.run("grid6x6.txt");
+        det.run("grid4x4.txt");
 	}
 
     private void run(String s) {
+        Stopwatch stopwatch = new Stopwatch();
         Point[] points = getPoints(s);
 
         for (int i = 0; i < points.length; i++) {
             createLines(points[i], Arrays.copyOfRange(points, i + 1, points.length));
         }
         drawLines();
-        StdOut.print("Number of lines: " + lines.size());
+        StdOut.println("Number of lines: " + lines.size());
+        StdOut.println("Done in: " + stopwatch.elapsedTime() + "s");
     }
 
     private void drawLines() {
@@ -61,14 +64,17 @@ public class LineDetector {
             line.add(p);
             line.add(points[i]);
             slope1 = p.slopeTo(points[i]);
-            System.out.println("Added: " + p + " to line");
             for (int j = i + 1; j < points.length; j++) {
                 slope2 = p.slopeTo(points[j]);
+
                 if (Double.compare(slope1, slope2) == 0) {
                     line.add(points[j]);
-                    String slope = Double.toString(slope1);
-                    if (!lines.containsKey(slope)) lines.put(slope, line);
-                    else if (lines.containsKey(slope) && lines.get(slope).size() < line.size()) lines.put(slope, line);
+                    String key = equationOfLine(slope1, points[i]) ;
+                    System.out.println("Key is: " + key);
+                    if (line.size() > 3) {
+                        if (!lines.containsKey(key) ) lines.put(key, line);
+                        else if (lines.containsKey(key) && lines.get(key).size() < line.size()) lines.put(key, line);
+                    }
                     if (j == points.length - 1) i = points.length;
                 } else {
                     i = j - 1;
@@ -111,4 +117,14 @@ public class LineDetector {
         return points;
     }
 
+    private String equationOfLine(double slope, Point p) {
+        double y, x, m, b;
+        y = p.getY();
+        x = p.getX();
+        m = slope;
+        b = (m*x) - y;
+        if (slope == Double.POSITIVE_INFINITY)
+            return "x = " + x;
+        return ("y = " + slope + "x + " + Double.toString(b));
+    }
 }
