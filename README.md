@@ -25,4 +25,4 @@ Output format. Print the line segments that your program discovers in the format
 
 5: (14000, 10000) -> (18000, 10000) -> (19000, 10000) -> (21000, 10000) -> (32000, 10000)
 
-Also, plot the points and the line segments using standard draw. Using the Point data type supplied, p.draw() draws the point p and p.drawTo(q) draws the line segment from p to q. Before drawing, scale the coordinate system so that coordinates between 0 and 30000 fit in the graphics window. Write suitable JUnit test cases to test your algorithm.
+Also, plot the points and the line segments using standard draw. Using the detection.Point data type supplied, p.draw() draws the point p and p.drawTo(q) draws the line segment from p to q. Before drawing, scale the coordinate system so that coordinates between 0 and 30000 fit in the graphics window. Write suitable JUnit test cases to test your algorithm.

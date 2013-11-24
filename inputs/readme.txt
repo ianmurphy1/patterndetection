@@ -17,7 +17,7 @@ Hours to complete assignment (optional):
 /**********************************************************************
  *  Step 1.  Explain *briefly* how you implemented brute force.
  *           Describe how you implemented compareTo() and the
- *           slopeTo() methods in the Point data type.
+ *           slopeTo() methods in the detection.Point data type.
  **********************************************************************/
 
 
