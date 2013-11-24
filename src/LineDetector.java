@@ -20,7 +20,7 @@ public class LineDetector {
 	 */
 	public static void main(String[] args) {
 		LineDetector det = new LineDetector();
-        det.run("input56.txt");
+        det.run("points.txt");
     }
 
     public void run(String a) {

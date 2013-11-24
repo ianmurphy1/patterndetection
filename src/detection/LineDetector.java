@@ -2,6 +2,7 @@ package detection;
 
 import edu.princeton.cs.introcs.In;
 import edu.princeton.cs.introcs.StdDraw;
+import edu.princeton.cs.introcs.StdOut;
 
 import java.util.*;
 
@@ -20,7 +21,7 @@ public class LineDetector {
 	 */
 	public static void main(String[] args) {
         LineDetector det = new LineDetector();
-        det.run("points.txt");
+        det.run("grid6x6.txt");
 	}
 
     private void run(String s) {
@@ -30,12 +31,24 @@ public class LineDetector {
             createLines(points[i], Arrays.copyOfRange(points, i + 1, points.length));
         }
         drawLines();
+        StdOut.print("Number of lines: " + lines.size());
     }
 
     private void drawLines() {
+
         for (Map.Entry<String, SortedSet<Point>> line: lines.entrySet()) {
             line.getValue().first().drawTo(line.getValue().last());
             System.out.println(line.getKey() + ", " + line.getValue().first() + line.getValue().last());
+            double rad = StdDraw.getPenRadius();
+            StdDraw.setPenRadius(rad * 3);
+            StdOut.print(line.getValue().size() + ": ");
+            for (Point p: line.getValue()) {
+                StdOut.print(p);
+                if (!p.equals(Collections.max(line.getValue()))) StdOut.print(" -> ");
+                else StdOut.print("\n");
+                p.draw();
+            }
+            StdDraw.setPenRadius(rad);
         }
     }
 
