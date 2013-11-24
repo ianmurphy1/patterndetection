@@ -1,3 +1,5 @@
+package Point;
+
 import edu.princeton.cs.introcs.StdDraw;
 
 import java.util.Comparator;
