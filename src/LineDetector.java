@@ -8,11 +8,11 @@ import java.util.*;
 
 public class LineDetector {
 
-    private ArrayList<SortedSet<Point>> lines;
+    private ArrayList<ArrayList<Point>> lines;
     private int count;
 
     public LineDetector() {
-        lines = new ArrayList<SortedSet<Point>>();
+        lines = new ArrayList<ArrayList<Point>>();
         count = 0;
     }
 
@@ -28,13 +28,13 @@ public class LineDetector {
         Point[] points = getPoints(a);
 
         for (int i = 0; i < points.length; i++) {
-            ArrayList<SortedSet<Point>> lns = createLines(points[i], Arrays.copyOfRange(points, (i + 1), points.length));
+            ArrayList<ArrayList<Point>> lns = createLines(points[i], Arrays.copyOfRange(points, (i + 1), points.length));
 
             if (lns.size() > 0) lines.addAll(lns);
         }
 
         //removeDups();
-        drawLines();
+        //drawLines();
 
         System.out.println("Line count is: " + lines.size());
         System.out.println("Count is: " + count);
@@ -43,9 +43,9 @@ public class LineDetector {
 
     private void removeDups() {
         for (int i = 0; i < lines.size(); i++) {
-            SortedSet<Point> ln = lines.get(i);
+            ArrayList<Point> ln = lines.get(i);
             for (int j = i + 1; j < lines.size() - 1; j++) {
-                SortedSet<Point> lne = lines.get(j);
+                ArrayList<Point> lne = lines.get(j);
                 if (ln.containsAll(lne)) {
                     lines.remove(lne);
                     j--;
@@ -58,7 +58,7 @@ public class LineDetector {
         System.out.println("Lines: " + lines.size());
 
         for (int i = 0; i < lines.size(); i++) {
-            SortedSet<Point> ln = lines.get(i);
+            ArrayList<Point> ln = lines.get(i);
             Collections.min(ln).drawTo(Collections.max(ln));
             for (Point p : ln) {
                     StdOut.print(p);
@@ -68,24 +68,30 @@ public class LineDetector {
         }
     }
 
-    private ArrayList<SortedSet<Point>> createLines(Point p, Point[] points) {
-        ArrayList<SortedSet<Point>> temps = new ArrayList<SortedSet<Point>>();
+    private ArrayList<ArrayList<Point>> createLines(Point p, Point[] points) {
+        ArrayList<ArrayList<Point>> temps = new ArrayList<ArrayList<Point>>();
         Arrays.sort(points, p.SLOPE_ORDER);
         double slope1, slope2;
 
         for (int i = 0; i < points.length; i++) {
-            SortedSet<Point> line = new TreeSet<Point>();
+            ArrayList<Point> line = new ArrayList<Point>();
             //System.out.println("Create Lines Method: " + line.size());
             line.add(p);
             line.add(points[i]);
+            printLine(line);
             slope1 = p.slopeTo(points[i]);
             System.out.println("Added: " + p + " to line.");
             for (int j = i + 1; j < points.length; j++) {
                 slope2 = p.slopeTo(points[j]);
+                int slopeComp = Double.compare(slope1, slope2);
                 System.out.println(points[j]);
                 count++;
-                if (slope1 == slope2) //{
+                boolean comp = slope1 == slope2;
+                System.out.println("Slope 1: " + slope1 + ", Slope 2: " + slope2 + ", Comparison: " + comp);
+                if (slope1 == slope2) {
                     line.add(points[j]);
+                    printLine(line);
+                }
                 System.out.println("Line size " + line.size());
                //     if (j == points.length - 1) i = points.length;
              //   } else {
@@ -93,11 +99,19 @@ public class LineDetector {
             //        break;
             //    }
             }
+
             System.out.println("Create Lines Method: " + line.size());
-            if (line.size() > 3) temps.add(line);
+            if (line.size() > 2) {
+                temps.add(line);
+            }
         }
 
         return temps;
+    }
+
+    private void printLine(ArrayList<Point> line) {
+        Collections.sort(line);
+        Collections.min(line).drawTo(Collections.max(line));
     }
 
     private Point[] getPoints(String file) {
