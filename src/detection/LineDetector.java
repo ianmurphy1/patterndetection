@@ -20,7 +20,7 @@ public class LineDetector {
 	 */
 	public static void main(String[] args) {
         LineDetector det = new LineDetector();
-        det.run("input80.txt");
+        det.run("points.txt");
 	}
 
     private void run(String s) {
@@ -33,23 +33,25 @@ public class LineDetector {
     }
 
     private void drawLines() {
-        for (Map.Entry line: lines.entrySet()) {
-            System.out.println(line.getKey() + ", " + line.getValue());
+        for (Map.Entry<String, SortedSet<Point>> line: lines.entrySet()) {
+            line.getValue().first().drawTo(line.getValue().last());
+            System.out.println(line.getKey() + ", " + line.getValue().first() + line.getValue().last());
         }
     }
 
 
     private void createLines(Point p, Point[] points) {
-        Arrays.sort(points, p.SLOPE_ORDER);
-        double slope1, slope2;
-        for (int i = 0; i < points.length; i++) {
+            Arrays.sort(points, p.SLOPE_ORDER);
+            double slope1, slope2;
+            for (int i = 0; i < points.length - 1; i++) {
             SortedSet<Point> line = new TreeSet<Point>();
             line.add(p);
             line.add(points[i]);
             slope1 = p.slopeTo(points[i]);
-            for (int j = 0; j < points.length - 1; j++) {
+            System.out.println("Added: " + p + " to line");
+            for (int j = i + 1; j < points.length; j++) {
                 slope2 = p.slopeTo(points[j]);
-                if (slope1 == slope2) {
+                if (Double.compare(slope1, slope2) == 0) {
                     line.add(points[j]);
                     String slope = Double.toString(slope1);
                     if (!lines.containsKey(slope)) lines.put(slope, line);

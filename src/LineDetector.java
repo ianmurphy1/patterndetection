@@ -1,6 +1,7 @@
 import detection.Point;
 import edu.princeton.cs.introcs.In;
 import edu.princeton.cs.introcs.StdDraw;
+import edu.princeton.cs.introcs.StdOut;
 
 import java.util.*;
 
@@ -54,12 +55,14 @@ public class LineDetector {
     }
 
     private void drawLines() {
+        System.out.println("Lines: " + lines.size());
+
         for (int i = 0; i < lines.size(); i++) {
             SortedSet<Point> ln = lines.get(i);
-
-            ln.first().drawTo(ln.last());
-            System.out.println(ln.first() + " " + ln.last());
+            Collections.min(ln).drawTo(Collections.max(ln));
             for (Point p : ln) {
+                StdOut.print(p);
+                if (!p.equals(Collections.max(ln))) StdOut.print(" -> ");
                 p.draw();
             }
         }
@@ -70,14 +73,16 @@ public class LineDetector {
         Arrays.sort(points, p.SLOPE_ORDER);
         double slope1, slope2;
 
-        for (int i = 0; i < points.length; i++) {
+        for (int i = 0; i < points.length- 1; i++) {
             SortedSet<Point> line = new TreeSet<Point>();
             //System.out.println("Create Lines Method: " + line.size());
             line.add(p);
             line.add(points[i]);
             slope1 = p.slopeTo(points[i]);
-            for (int j = i + 1; j < points.length; j++) {
+            System.out.println("Added: " + p + " to line.");
+            for (int j = i + 1; j < points.length - 1; j++) {
                 slope2 = p.slopeTo(points[j]);
+                System.out.println(points[j]);
                 count++;
                 if (slope1 == slope2) {
                     line.add(points[j]);
