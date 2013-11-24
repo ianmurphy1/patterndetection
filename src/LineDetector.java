@@ -1,6 +1,7 @@
 import edu.princeton.cs.introcs.In;
 import edu.princeton.cs.introcs.StdDraw;
 import edu.princeton.cs.introcs.StdOut;
+import edu.princeton.cs.introcs.Stopwatch;
 
 import java.util.*;
 
@@ -20,10 +21,11 @@ public class LineDetector {
 	 */
 	public static void main(String[] args) {
 		LineDetector det = new LineDetector();
-        det.run("points.txt");
+        det.run("input10000.txt");
     }
 
     public void run(String a) {
+        Stopwatch stopwatch = new Stopwatch();
         Point[] points = getPoints(a);
 
         for (int i = 0; i < points.length; i++) {
@@ -34,6 +36,9 @@ public class LineDetector {
 
         removeDups();
         drawLines();
+        StdOut.println("Number of lines: " + lines.size());
+        StdOut.println("Done in: " + stopwatch.elapsedTime() + "s");
+        StdOut.println("Op Count: " + count);
     }
 
     private void removeDups() {
@@ -53,14 +58,18 @@ public class LineDetector {
     private void drawLines() {
         for (int i = 0; i < lines.size(); i++) {
             ArrayList<Point> ln = lines.get(i);
+            Collections.sort(ln);
             Collections.min(ln).drawTo(Collections.max(ln));
-            StdOut.print(ln.size());
+            StdOut.print(ln.size() + ": ");
+            double rad = StdDraw.getPenRadius();
+            StdDraw.setPenRadius(rad * 3);
             for (Point p : ln) {
                     StdOut.print(p);
                     if (!p.equals(Collections.max(ln))) StdOut.print(" -> ");
                     else StdOut.print("\n");
                     p.draw();
             }
+            StdDraw.setPenRadius(rad);
         }
     }
 
@@ -74,7 +83,7 @@ public class LineDetector {
 
         double slope1, slope2;
 
-        for (int i = 0; i < points.length; i++) {
+        for (int i = 0; i < points.length - 2; i++) {
             ArrayList<Point> line = new ArrayList<Point>();
             line.add(p);
             line.add(points[i]);
@@ -99,19 +108,6 @@ public class LineDetector {
 
         return temps;
     }
-
-    private void printLine(ArrayList<Point> line) {
-        String s="";
-        for(Point p : line) {
-            s += p.toString() + " > ";
-        }
-        System.out.println(s);
-        Collections.sort(line);
-        Collections.min(line).drawTo(Collections.max(line));
-        System.out.println("first: " + Collections.min(line) + " last: " + Collections.max(line));
-    }
-
-
 
     private Point[] getPoints(String file) {
 
