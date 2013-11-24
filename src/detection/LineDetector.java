@@ -3,9 +3,7 @@ package detection;
 import edu.princeton.cs.introcs.In;
 import edu.princeton.cs.introcs.StdDraw;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.SortedSet;
+import java.util.*;
 
 public class LineDetector {
 
@@ -22,16 +20,49 @@ public class LineDetector {
 	 */
 	public static void main(String[] args) {
         LineDetector det = new LineDetector();
-        det.run("points.txt");
+        det.run("input80.txt");
 	}
 
     private void run(String s) {
         Point[] points = getPoints(s);
-        createLines();
+
+        for (int i = 0; i < points.length; i++) {
+            createLines(points[i], Arrays.copyOfRange(points, i + 1, points.length));
+        }
+        drawLines();
     }
 
-    private void createLines() {
+    private void drawLines() {
+        for (Map.Entry line: lines.entrySet()) {
+            System.out.println(line.getKey() + ", " + line.getValue());
+        }
+    }
 
+
+    private void createLines(Point p, Point[] points) {
+        Arrays.sort(points, p.SLOPE_ORDER);
+        double slope1, slope2;
+        for (int i = 0; i < points.length; i++) {
+            SortedSet<Point> line = new TreeSet<Point>();
+            line.add(p);
+            line.add(points[i]);
+            slope1 = p.slopeTo(points[i]);
+            for (int j = 0; j < points.length - 1; j++) {
+                slope2 = p.slopeTo(points[j]);
+                if (slope1 == slope2) {
+                    line.add(points[j]);
+                    String slope = Double.toString(slope1);
+                    if (!lines.containsKey(slope)) lines.put(slope, line);
+                    else if (lines.containsKey(slope) && lines.get(slope).size() < line.size()) lines.put(slope, line);
+                    if (j == points.length - 1) i = points.length;
+                } else {
+                    i = j - 1;
+                    break;
+                }
+            }
+        }
+
+        System.out.println(lines.size());
     }
 
     private Point[] getPoints(String file) {
