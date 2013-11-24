@@ -61,9 +61,9 @@ public class LineDetector {
             SortedSet<Point> ln = lines.get(i);
             Collections.min(ln).drawTo(Collections.max(ln));
             for (Point p : ln) {
-                StdOut.print(p);
-                if (!p.equals(Collections.max(ln))) StdOut.print(" -> ");
-                p.draw();
+                    StdOut.print(p);
+                    if (!p.equals(Collections.max(ln))) StdOut.print(" -> ");
+                    p.draw();
             }
         }
     }
@@ -73,27 +73,28 @@ public class LineDetector {
         Arrays.sort(points, p.SLOPE_ORDER);
         double slope1, slope2;
 
-        for (int i = 0; i < points.length- 1; i++) {
+        for (int i = 0; i < points.length; i++) {
             SortedSet<Point> line = new TreeSet<Point>();
             //System.out.println("Create Lines Method: " + line.size());
             line.add(p);
             line.add(points[i]);
             slope1 = p.slopeTo(points[i]);
             System.out.println("Added: " + p + " to line.");
-            for (int j = i + 1; j < points.length - 1; j++) {
+            for (int j = i + 1; j < points.length; j++) {
                 slope2 = p.slopeTo(points[j]);
                 System.out.println(points[j]);
                 count++;
-                if (slope1 == slope2) {
+                if (slope1 == slope2) //{
                     line.add(points[j]);
-                    if (j == points.length - 1) i = points.length;
-                } else {
-                    i = j - 1;
-                    break;
-                }
+                System.out.println("Line size " + line.size());
+               //     if (j == points.length - 1) i = points.length;
+             //   } else {
+            //        i = j - 1;
+            //        break;
+            //    }
             }
             System.out.println("Create Lines Method: " + line.size());
-            if (line.size() > 2) temps.add(line);
+            if (line.size() > 3) temps.add(line);
         }
 
         return temps;
