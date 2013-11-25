@@ -133,6 +133,7 @@ public class LineDetector {
             if (tMax > max) max = tMax;
             if (tMin < min) min = tMin;
             points[i] = new Point(x, y);
+            points[i].draw();
             i++;
         }
         StdOut.println("Number of points: " + n);

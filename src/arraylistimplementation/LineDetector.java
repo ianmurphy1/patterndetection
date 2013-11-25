@@ -41,7 +41,6 @@ public class LineDetector {
         StdDraw.show(0); //Turn off animation
         Point[] points = getPoints(s);
         for (int i = 0; i < points.length; i++) {
-            points[i].draw();
             ArrayList<ArrayList<Point>> lns = createLines(points[i], Arrays.copyOfRange(points, (i + 1), points.length));
             if (lns.size() > 0) lines.addAll(lns);
         }
@@ -88,9 +87,7 @@ public class LineDetector {
                 StdOut.print(p);
                 if (!p.equals(Collections.max(ln))) StdOut.print(" -> ");
                 else StdOut.print("\n");
-                double x, y;
-                x = p.getX(); y = p.getY();
-                StdDraw.filledCircle(x, y, 60d);
+                p.draw();
             }
             StdDraw.setPenRadius(rad);
         }
@@ -150,6 +147,7 @@ public class LineDetector {
             if (tMax > max) max = tMax;
             if (tMin < min) min = tMin;
             points[i] = new Point(x, y);
+            points[i].draw();
             i++;
         }
         StdOut.println("Number of points: " + n);

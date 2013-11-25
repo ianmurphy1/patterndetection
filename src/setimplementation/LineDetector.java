@@ -43,7 +43,6 @@ public class LineDetector {
         StdDraw.show(0);
         Point[] points = getPoints(a);
         for (int i = 0; i < points.length; i++) {
-            points[i].draw();
             List<SortedSet<Point>> theseLines = createLines(points[i], Arrays.copyOfRange(points, i + 1, points.length));
             if (theseLines.size() > 0) lines.addAll(theseLines);
         }
@@ -148,6 +147,7 @@ public class LineDetector {
             if (tMax > max) max = tMax;
             if (tMin < min) min = tMin;
             points[i] = new Point(x, y);
+            points[i].draw();
             i++;
         }
         StdOut.println("Number of points: " + n);
