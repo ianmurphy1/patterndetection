@@ -39,7 +39,7 @@ public class LineDetector {
      *
      * @param s
      */
-    private void run(String s) {
+    public void run(String s) {
         Stopwatch stopwatch = new Stopwatch();
         StdDraw.show(0);
         Point[] points = getPoints(s);
