@@ -73,7 +73,6 @@ public class Point implements Comparable<Point> {
 
     // unit test
     public static void main(String[] args) {
-       //Then use this to start sort????
     }
 
 	public int getX() {

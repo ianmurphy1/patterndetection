@@ -57,7 +57,6 @@ public class LineDetector {
      *
      */
     private void removeDups() {
-
         for (int i = 0; i < lines.size(); i++) {
             ArrayList<Point> ln = lines.get(i);
             for (int j = i + 1; j < lines.size() - 1; j++) {
@@ -130,7 +129,6 @@ public class LineDetector {
      * @return
      */
     private Point[] getPoints(String file) {
-
         In in = new In("inputs/" + file);
         if (!in.exists()) System.exit(1);
         int n = in.readInt();

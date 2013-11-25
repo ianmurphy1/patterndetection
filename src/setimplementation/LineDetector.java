@@ -39,20 +39,20 @@ public class LineDetector {
      * @param a
      */
     public void run(String a) {
-        //Stopwatch stopwatch = new Stopwatch();
+        Stopwatch stopwatch = new Stopwatch();
         StdDraw.show(0);
         Point[] points = getPoints(a);
         for (int i = 0; i < points.length; i++) {
             List<SortedSet<Point>> theseLines = createLines(points[i], Arrays.copyOfRange(points, i + 1, points.length));
             if (theseLines.size() > 0) lines.addAll(theseLines);
         }
-        //removeDups();
-        //drawLines();
-        //StdDraw.show(0);
-        //StdDraw.save("outputs/" + a.replace(".txt", ".png"));
-        //StdOut.println("Number of lines: " + lines.size());
-        //StdOut.println("Done in: " + stopwatch.elapsedTime() + "s");
-        //StdOut.println("Op Count: " + count);
+        removeDups();
+        drawLines();
+        StdDraw.show(0);
+        StdDraw.save("outputs/" + a.replace(".txt", ".png"));
+        StdOut.println("Number of lines: " + lines.size());
+        StdOut.println("Done in: " + stopwatch.elapsedTime() + "s");
+        StdOut.println("Op Count: " + count);
     }
 
     /**
@@ -66,7 +66,8 @@ public class LineDetector {
                 if (ln.containsAll(lne)) {
                     lines.remove(lne);
                     j--;
-                }  // If ln contains items in lne, remove it from list.
+                }  // If ln contains all of the items in lne then lne is a subset of ln
+                   // so it can be removed from the list.
                    // Minus j as removing element decrements all indexes.
             }
         }
@@ -78,7 +79,7 @@ public class LineDetector {
     private void drawLines() {
         for (int i = 0; i < lines.size(); i++) {
             SortedSet<Point> ln = lines.get(i);
-            StdDraw.setPenColor(Color.getHSBColor((float) Math.random(), .8f, .8f));
+            StdDraw.setPenColor(Color.getHSBColor((float) Math.random(), .8f, .8f)); //Random colour for line
             ln.first().drawTo(ln.last());
             StdDraw.setPenColor(StdDraw.BLACK);
             StdOut.print(ln.size() + ": ");
@@ -147,22 +148,22 @@ public class LineDetector {
             if (tMax > max) max = tMax;
             if (tMin < min) min = tMin;
             points[i] = new Point(x, y);
-            //points[i].draw();
+            points[i].draw();
             i++;
         }
-        //StdOut.println("Number of points: " + n);
-       // StdOut.println("Min: " + min);
-       // StdOut.println("Max: " + max);
-        //StdDraw.setScale(min, max * 1.1);
-      //  double rad = StdDraw.getPenRadius();
-      //  StdDraw.setPenRadius(rad * 1.5);
-      //  StdDraw.setPenColor(StdDraw.BOOK_RED);
-     //   StdDraw.line(min, 0, max, 0);
-     //   StdDraw.line(0, min, 0, max);
-     //   StdDraw.setPenColor(StdDraw.BLACK);
-     //   StdDraw.setPenRadius(rad);
-     //   StdDraw.text(max * 1.05, 0, "x");
-     //   StdDraw.text(15, max * 1.05, "y");
+        StdOut.println("Number of points: " + n);
+        StdOut.println("Min: " + min);
+        StdOut.println("Max: " + max);
+        StdDraw.setScale(min, max * 1.1);
+        double rad = StdDraw.getPenRadius();
+        StdDraw.setPenRadius(rad * 1.5);
+        StdDraw.setPenColor(StdDraw.BOOK_RED);
+        StdDraw.line(min, 0, max, 0);
+        StdDraw.line(0, min, 0, max);
+        StdDraw.setPenColor(StdDraw.BLACK);
+        StdDraw.setPenRadius(rad);
+        StdDraw.text(max * 1.05, 0, "x");
+        StdDraw.text(15, max * 1.05, "y");
         return points;
     }
 }
