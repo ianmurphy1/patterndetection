@@ -31,7 +31,7 @@ public class LineDetector {
     public void run(String a) {
         Stopwatch stopwatch = new Stopwatch();
         Point[] points = getPoints(a);
-
+        StdDraw.show(0); //Turn off animation
         for (int i = 0; i < points.length; i++) {
             points[i].draw();
             ArrayList<ArrayList<Point>> lns = createLines(points[i], Arrays.copyOfRange(points, (i + 1), points.length));
@@ -40,9 +40,11 @@ public class LineDetector {
 
         removeDups();
         drawLines();
+        StdDraw.show(0); //Turn it back on and show all lines and points
         StdOut.println("Number of lines: " + lines.size());
         StdOut.println("Done in: " + stopwatch.elapsedTime() + "s");
         StdOut.println("Op Count: " + count);
+
     }
 
     private void removeDups() {
@@ -68,10 +70,12 @@ public class LineDetector {
             double rad = StdDraw.getPenRadius();
             StdDraw.setPenRadius(rad * 3);
             for (Point p : ln) {
-                    StdOut.print(p);
-                    if (!p.equals(Collections.max(ln))) StdOut.print(" -> ");
-                    else StdOut.print("\n");
-                    p.draw();
+                StdOut.print(p);
+                if (!p.equals(Collections.max(ln))) StdOut.print(" -> ");
+                else StdOut.print("\n");
+                double x, y;
+                x = p.getX(); y = p.getY();
+                StdDraw.filledCircle(x, y, 60d);
             }
             StdDraw.setPenRadius(rad);
         }
@@ -122,30 +126,40 @@ public class LineDetector {
         int n = in.readInt();
         Point[] points = new Point[n];
 
-        double xMin, xMax, yMin, yMax;
+        double min, max;
 
-        xMax = yMax = Double.MIN_VALUE;
-        xMin = yMin = Double.MAX_VALUE;
+        min = Double.MAX_VALUE;
+        max = Double.MIN_VALUE;
 
         int i = 0;
         while (i < n) {
+
             int x = in.readInt(), y = in.readInt();
-            if (x < xMin) xMin = x;
-            if (x > xMax) xMax = x;
-            if (y < yMin) yMin = y;
-            if (y > yMax) yMax = y;
+            double tMax, tMin;
+
+            tMax = Math.max(x, y);
+            tMin = Math.min(x, y);
+
+            if (tMax > max) max = tMax;
+            if (tMin < min) min = tMin;
+
             points[i] = new Point(x, y);
             i++;
         }
 
-        System.out.println("Number of points: " + n);
-        System.out.println("Max X: " + xMax);
-        System.out.println("Max Y: " + yMax);
-        System.out.println("Min X: " + xMin);
-        System.out.println("Min Y: " + yMin);
-        StdDraw.setXscale(xMin, xMax);
-        StdDraw.setYscale(yMin, yMax);
-
+        StdOut.println("Number of points: " + n);
+        StdOut.println("Min: " + min);
+        StdOut.println("Max: " + max);
+        StdDraw.setScale(min, max * 1.1);
+        double rad = StdDraw.getPenRadius();
+        StdDraw.setPenRadius(rad * 1.5);
+        StdDraw.setPenColor(StdDraw.BOOK_RED);
+        StdDraw.line(min, 0, max, 0);
+        StdDraw.line(0, min, 0, max);
+        StdDraw.setPenColor(StdDraw.BLACK);
+        StdDraw.setPenRadius(rad);
+        StdDraw.text(max * 1.05, 0, "x");
+        StdDraw.text(15, max * 1.05, "y");
         return points;
     }
 }

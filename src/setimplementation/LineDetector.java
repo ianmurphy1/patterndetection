@@ -61,7 +61,8 @@ public class LineDetector {
                 if (ln.containsAll(lne)) {
                     lines.remove(lne);
                     j--;
-                }  // If line has a subset of
+                }  // If ln contains items in lne, remove it from list.
+                   // Minus j as removing element decrements all indexes.
             }
         }
     }
@@ -119,26 +120,40 @@ public class LineDetector {
         int n = in.readInt();
         Point[] points = new Point[n];
 
-        double xMin, xMax, yMin, yMax;
-        xMax = xMin = yMin = yMax = 0d;
+        double min, max;
+
+        min = Double.MAX_VALUE;
+        max = Double.MIN_VALUE;
+
         int i = 0;
         while (i < n) {
+
             int x = in.readInt(), y = in.readInt();
-            if (x < xMin) xMin = x;
-            if (x > xMax) xMax = x;
-            if (y < yMin) yMin = y;
-            if (y > yMax) yMax = y;
+            double tMax, tMin;
+
+            tMax = Math.max(x, y);
+            tMin = Math.min(x, y);
+
+            if (tMax > max) max = tMax;
+            if (tMin < min) min = tMin;
+
             points[i] = new Point(x, y);
             i++;
         }
 
         StdOut.println("Number of points: " + n);
-        StdOut.println("Max X: " + xMax);
-        StdOut.println("Max Y: " + yMax);
-        StdOut.println("Min X: " + xMin);
-        StdOut.println("Max Y: " + yMin);
-        StdDraw.setXscale(xMin, xMax);
-        StdDraw.setYscale(yMin, yMax);
+        StdOut.println("Min: " + min);
+        StdOut.println("Max: " + max);
+        StdDraw.setScale(min, max * 1.1);
+        double rad = StdDraw.getPenRadius();
+        StdDraw.setPenRadius(rad * 1.5);
+        StdDraw.setPenColor(StdDraw.BOOK_RED);
+        StdDraw.line(min, 0, max, 0);
+        StdDraw.line(0, min, 0, max);
+        StdDraw.setPenColor(StdDraw.BLACK);
+        StdDraw.setPenRadius(rad);
+        StdDraw.text(max * 1.05, 0, "x");
+        StdDraw.text(15, max * 1.05, "y");
         return points;
     }
 }
