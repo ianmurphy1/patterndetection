@@ -1,8 +1,6 @@
 package setimplementation;
 
-
 import Point.Point;
-
 import edu.princeton.cs.introcs.In;
 import edu.princeton.cs.introcs.StdDraw;
 import edu.princeton.cs.introcs.StdOut;
@@ -14,8 +12,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.SortedSet;
 import java.util.TreeSet;
-
-
 
 /**
  * @author Ian Murphy - 20057028
@@ -38,18 +34,23 @@ public class LineDetector {
         det.run("points.txt");
     }
 
+    /**
+     *
+     * @param a
+     */
     public void run(String a) {
         Stopwatch stopwatch = new Stopwatch();
+        StdDraw.show(0);
         Point[] points = getPoints(a);
-
         for (int i = 0; i < points.length; i++) {
             points[i].draw();
             List<SortedSet<Point>> theseLines = createLines(points[i], Arrays.copyOfRange(points, i + 1, points.length));
             if (theseLines.size() > 0) lines.addAll(theseLines);
         }
-
         removeDups();
         drawLines();
+        StdDraw.show(0);
+        StdDraw.save("outputs/" + a.replace(".txt", ".png"));
         StdOut.println("Number of lines: " + lines.size());
         StdOut.println("Done in: " + stopwatch.elapsedTime() + "s");
         StdOut.println("Op Count: " + count);
@@ -105,7 +106,6 @@ public class LineDetector {
         List<SortedSet<Point>> theseLines = new ArrayList<SortedSet<Point>>();
         SortedSet<Point> line = new TreeSet<Point>();
         double slope1, slope2;
-
         for (int i = 0; i < rest.length - 2; i++) {
             line.add(p);
             line.add(rest[i]);
@@ -132,35 +132,24 @@ public class LineDetector {
      * @return
      */
     private Point[] getPoints(String file) {
-
         In in = new In("inputs/" + file);
-
         if (!in.exists()) System.exit(1);
-
         int n = in.readInt();
         Point[] points = new Point[n];
-
         double min, max;
-
         min = Double.MAX_VALUE;
         max = Double.MIN_VALUE;
-
         int i = 0;
         while (i < n) {
-
             int x = in.readInt(), y = in.readInt();
             double tMax, tMin;
-
             tMax = Math.max(x, y);
             tMin = Math.min(x, y);
-
             if (tMax > max) max = tMax;
             if (tMin < min) min = tMin;
-
             points[i] = new Point(x, y);
             i++;
         }
-
         StdOut.println("Number of points: " + n);
         StdOut.println("Min: " + min);
         StdOut.println("Max: " + max);

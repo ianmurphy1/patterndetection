@@ -52,9 +52,6 @@ public class Point implements Comparable<Point> {
         return dy/dx;
     }
 
-
-
-
     // is this point lexicographically smaller than that one?
     // comparing y-coordinates and breaking ties by x-coordinates
     public int compareTo(Point that) {

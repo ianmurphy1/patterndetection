@@ -11,6 +11,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 
+/**
+ *@author
+ */
 public class LineDetector {
 
     private ArrayList<ArrayList<Point>> lines;
@@ -31,21 +34,21 @@ public class LineDetector {
 
     /**
      *
-     * @param a
+     * @param s
      */
-    public void run(String a) {
+    public void run(String s) {
         Stopwatch stopwatch = new Stopwatch();
-        Point[] points = getPoints(a);
         StdDraw.show(0); //Turn off animation
+        Point[] points = getPoints(s);
         for (int i = 0; i < points.length; i++) {
             points[i].draw();
             ArrayList<ArrayList<Point>> lns = createLines(points[i], Arrays.copyOfRange(points, (i + 1), points.length));
             if (lns.size() > 0) lines.addAll(lns);
         }
-
         removeDups();
         drawLines();
         StdDraw.show(0); //Turn it back on and show all lines and points
+        StdDraw.save("outputs/" + s.replace(".txt", ".png"));
         StdOut.println("Number of lines: " + lines.size());
         StdOut.println("Done in: " + stopwatch.elapsedTime() + "s");
         StdOut.println("Op Count: " + count);
@@ -132,33 +135,23 @@ public class LineDetector {
     private Point[] getPoints(String file) {
 
         In in = new In("inputs/" + file);
-
         if (!in.exists()) System.exit(1);
-
         int n = in.readInt();
         Point[] points = new Point[n];
-
         double min, max;
-
         min = Double.MAX_VALUE;
         max = Double.MIN_VALUE;
-
         int i = 0;
         while (i < n) {
-
             int x = in.readInt(), y = in.readInt();
             double tMax, tMin;
-
             tMax = Math.max(x, y);
             tMin = Math.min(x, y);
-
             if (tMax > max) max = tMax;
             if (tMin < min) min = tMin;
-
             points[i] = new Point(x, y);
             i++;
         }
-
         StdOut.println("Number of points: " + n);
         StdOut.println("Min: " + min);
         StdOut.println("Max: " + max);

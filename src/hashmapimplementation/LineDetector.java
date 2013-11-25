@@ -14,7 +14,9 @@ import java.util.TreeSet;
 import java.util.SortedSet;
 import java.util.Collections;
 
-
+/**
+ *
+ */
 public class LineDetector {
 
     private Map<String, SortedSet<Point>> lines;
@@ -41,12 +43,12 @@ public class LineDetector {
         Stopwatch stopwatch = new Stopwatch();
         StdDraw.show(0);
         Point[] points = getPoints(s);
-
         for (int i = 0; i < points.length; i++) {
             createLines(points[i], Arrays.copyOfRange(points, i + 1, points.length));
         }
         drawLines();
         StdDraw.show(0);
+        StdDraw.save("outputs/" + s.replace(".txt", ".png"));
         StdOut.println("Number of lines: " + lines.size());
         StdOut.println("Done in: " + stopwatch.elapsedTime() + "s");
         StdOut.println("Op Count: " + count);
@@ -56,7 +58,6 @@ public class LineDetector {
      *
      */
     private void drawLines() {
-
         for (Map.Entry<String, SortedSet<Point>> line: lines.entrySet()) {
             StdDraw.setPenColor(Color.getHSBColor((float) Math.random(), .8f, .8f));
             line.getValue().first().drawTo(line.getValue().last());
@@ -117,33 +118,23 @@ public class LineDetector {
     private Point[] getPoints(String file) {
 
         In in = new In("inputs/" + file);
-
         if (!in.exists()) System.exit(1);
-
         int n = in.readInt();
         Point[] points = new Point[n];
-
         double min, max;
-
         min = Double.MAX_VALUE;
         max = Double.MIN_VALUE;
-
         int i = 0;
         while (i < n) {
-
             int x = in.readInt(), y = in.readInt();
             double tMax, tMin;
-
             tMax = Math.max(x, y);
             tMin = Math.min(x, y);
-
             if (tMax > max) max = tMax;
             if (tMin < min) min = tMin;
-
             points[i] = new Point(x, y);
             i++;
         }
-
         StdOut.println("Number of points: " + n);
         StdOut.println("Min: " + min);
         StdOut.println("Max: " + max);
