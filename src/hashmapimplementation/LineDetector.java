@@ -33,6 +33,10 @@ public class LineDetector {
         det.run("input10000.txt");
 	}
 
+    /**
+     *
+     * @param s
+     */
     private void run(String s) {
         Stopwatch stopwatch = new Stopwatch();
         StdDraw.show(0);
@@ -48,6 +52,9 @@ public class LineDetector {
         StdOut.println("Op Count: " + count);
     }
 
+    /**
+     *
+     */
     private void drawLines() {
 
         for (Map.Entry<String, SortedSet<Point>> line: lines.entrySet()) {
@@ -67,6 +74,11 @@ public class LineDetector {
         }
     }
 
+    /**
+     *
+     * @param p
+     * @param points
+     */
     private void createLines(Point p, Point[] points) {
             Arrays.sort(points, p.SLOPE_ORDER);
             double slope1, slope2;
@@ -80,8 +92,7 @@ public class LineDetector {
                 count++;
                 if (Double.compare(slope1, slope2) == 0) {
                     line.add(points[j]);
-                    String key = equationOfLine(slope1, points[i]) ;
-                    //System.out.println("Key is: " + key);
+                    String key = equationOfLine(slope1, points[i]) ; //Create key for map
                     if (line.size() > 3) { //If line has three or more points try adding to map.
                         if (!lines.containsKey(key) ) lines.put(key, line);
                         else if (lines.containsKey(key) && lines.get(key).size() < line.size()) lines.put(key, line);
@@ -98,6 +109,11 @@ public class LineDetector {
         }
     }
 
+    /**
+     *
+     * @param file
+     * @return
+     */
     private Point[] getPoints(String file) {
 
         In in = new In("inputs/" + file);
@@ -144,6 +160,12 @@ public class LineDetector {
         return points;
     }
 
+    /**
+     *
+     * @param slope
+     * @param p
+     * @return
+     */
     private String equationOfLine(double slope, Point p) {
         double y, x, m, b;
         y = p.getY();

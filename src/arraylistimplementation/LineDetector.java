@@ -6,6 +6,7 @@ import edu.princeton.cs.introcs.StdDraw;
 import edu.princeton.cs.introcs.StdOut;
 import edu.princeton.cs.introcs.Stopwatch;
 
+import java.awt.Color;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -28,6 +29,10 @@ public class LineDetector {
         det.run("input10000.txt");
     }
 
+    /**
+     *
+     * @param a
+     */
     public void run(String a) {
         Stopwatch stopwatch = new Stopwatch();
         Point[] points = getPoints(a);
@@ -44,9 +49,11 @@ public class LineDetector {
         StdOut.println("Number of lines: " + lines.size());
         StdOut.println("Done in: " + stopwatch.elapsedTime() + "s");
         StdOut.println("Op Count: " + count);
-
     }
 
+    /**
+     *
+     */
     private void removeDups() {
 
         for (int i = 0; i < lines.size(); i++) {
@@ -61,11 +68,16 @@ public class LineDetector {
         }
     }
 
+    /**
+     *
+     */
     private void drawLines() {
         for (int i = 0; i < lines.size(); i++) {
             ArrayList<Point> ln = lines.get(i);
             Collections.sort(ln);
+            StdDraw.setPenColor(Color.getHSBColor((float) Math.random(), .8f, .8f));
             Collections.min(ln).drawTo(Collections.max(ln));
+            StdDraw.setPenColor(StdDraw.BLACK);
             StdOut.print(ln.size() + ": ");
             double rad = StdDraw.getPenRadius();
             StdDraw.setPenRadius(rad * 3);
@@ -81,16 +93,16 @@ public class LineDetector {
         }
     }
 
+    /**
+     *
+     * @param p
+     * @param points
+     * @return
+     */
     private ArrayList<ArrayList<Point>> createLines(Point p, Point[] points) {
         ArrayList<ArrayList<Point>> temps = new ArrayList<ArrayList<Point>>();
         Arrays.sort(points, p.SLOPE_ORDER);
-
-       // for (int i = 0; i < points.length; i++) {
-      //      System.out.println(p + "'s slope to " + points[i] + ": " + p.slopeTo(points[i]));
-       // }
-
         double slope1, slope2;
-
         for (int i = 0; i < points.length - 2; i++) {
             ArrayList<Point> line = new ArrayList<Point>();
             line.add(p);
@@ -99,8 +111,7 @@ public class LineDetector {
             for (int j = i + 1; j < points.length; j++) {
                 slope2 = p.slopeTo(points[j]);
                 count++;
-                if (slope1 == slope2) {
-                    //printLine(line);
+                if (Double.compare(slope1, slope2) == 0) {
                     line.add(points[j]);
                     if (j == points.length - 1) i = points.length;
                 } else {
@@ -108,15 +119,16 @@ public class LineDetector {
                     break;
                 }
             }
-            if (line.size() > 3) {
-                //printLine(line);
-                temps.add(line);
-            }
+            if (line.size() > 3) temps.add(line); //Size of line is bigger that 3, add it to list being returned.
         }
-
         return temps;
     }
 
+    /**
+     *
+     * @param file
+     * @return
+     */
     private Point[] getPoints(String file) {
 
         In in = new In("inputs/" + file);

@@ -8,6 +8,7 @@ import edu.princeton.cs.introcs.StdDraw;
 import edu.princeton.cs.introcs.StdOut;
 import edu.princeton.cs.introcs.Stopwatch;
 
+import java.awt.Color;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -23,6 +24,7 @@ import java.util.TreeSet;
 public class LineDetector {
     private ArrayList<SortedSet<Point>> lines;
     private int count;
+
     public LineDetector() {
         lines = new ArrayList<SortedSet<Point>>();
         count = 0;
@@ -53,6 +55,9 @@ public class LineDetector {
         StdOut.println("Op Count: " + count);
     }
 
+    /**
+     *
+     */
     private void removeDups() {
         for (int i = 0; i < lines.size(); i++) {
             SortedSet<Point> ln = lines.get(i);
@@ -67,11 +72,15 @@ public class LineDetector {
         }
     }
 
+    /**
+     *
+     */
     private void drawLines() {
         for (int i = 0; i < lines.size(); i++) {
             SortedSet<Point> ln = lines.get(i);
-
+            StdDraw.setPenColor(Color.getHSBColor((float) Math.random(), .8f, .8f));
             ln.first().drawTo(ln.last());
+            StdDraw.setPenColor(StdDraw.BLACK);
             StdOut.print(ln.size() + ": ");
             double rad = StdDraw.getPenRadius();
             StdDraw.setPenRadius(rad * 3);
@@ -85,6 +94,12 @@ public class LineDetector {
         }
     }
 
+    /**
+     *
+     * @param p
+     * @param rest
+     * @return
+     */
     private List<SortedSet<Point>> createLines(Point p, Point[] rest) {
         Arrays.sort(rest, p.SLOPE_ORDER);
         List<SortedSet<Point>> theseLines = new ArrayList<SortedSet<Point>>();
@@ -98,7 +113,7 @@ public class LineDetector {
             for (int j = i + 1; j < rest.length; j++) {
                 slope2 = p.slopeTo(rest[j]);
                 count++;
-                if (slope1 == slope2) {
+                if (Double.compare(slope1, slope2) == 0) {
                     line.add(rest[j]);
                     if (line.size() > 3) theseLines.add(line);
                     if (j == rest.length - 1) i = rest.length;
@@ -111,6 +126,11 @@ public class LineDetector {
         return theseLines;
     }
 
+    /**
+     *
+     * @param file
+     * @return
+     */
     private Point[] getPoints(String file) {
 
         In in = new In("inputs/" + file);
