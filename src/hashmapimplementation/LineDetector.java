@@ -77,9 +77,12 @@ public class LineDetector {
                     line.add(points[j]);
                     String key = equationOfLine(slope1, points[i]) ;
                     //System.out.println("Key is: " + key);
-                    if (line.size() > 3) {
+                    if (line.size() > 3) { //If line has three or more points try adding to map.
                         if (!lines.containsKey(key) ) lines.put(key, line);
                         else if (lines.containsKey(key) && lines.get(key).size() < line.size()) lines.put(key, line);
+                        //Check if a set with a key exists, if it doesn't put it into map
+                        //if the map has entry with the same key check if its the biggest, if it is bigger
+                        //than the current entry, add it otherwise leave the current one there.
                     }
                     if (j == points.length - 1) i = points.length;
                 } else {
