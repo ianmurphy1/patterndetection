@@ -32,7 +32,7 @@ public class LineDetector {
 	 */
 	public static void main(String[] args) {
         LineDetector det = new LineDetector();
-        det.run("input10000.txt");
+        det.run("mystery10089.txt");
 	}
 
     /**
