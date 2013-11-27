@@ -31,7 +31,7 @@ public class LineDetector {
      */
     public static void main(String[] args) {
         LineDetector det = new LineDetector();
-        det.run("points.txt");
+        det.run("input56.txt");
     }
 
     /**
@@ -43,7 +43,7 @@ public class LineDetector {
         StdDraw.show(0);
         Point[] points = getPoints(a);
         for (int i = 0; i < points.length; i++) {
-            List<SortedSet<Point>> theseLines = createLines(points[i], Arrays.copyOfRange(points, i + 1, points.length));
+            ArrayList<SortedSet<Point>> theseLines = createLines(points[i], Arrays.copyOfRange(points, i + 1, points.length));
             if (theseLines.size() > 0) lines.addAll(theseLines);
         }
         removeDups();
@@ -98,25 +98,25 @@ public class LineDetector {
     /**
      *
      * @param p
-     * @param rest
+     * @param points
      * @return
      */
-    private List<SortedSet<Point>> createLines(Point p, Point[] rest) {
-        Arrays.sort(rest, p.SLOPE_ORDER);
-        List<SortedSet<Point>> theseLines = new ArrayList<SortedSet<Point>>();
-        SortedSet<Point> line = new TreeSet<Point>();
+    private ArrayList<SortedSet<Point>> createLines(Point p, Point[] points) {
+        Arrays.sort(points, p.SLOPE_ORDER);
+        ArrayList<SortedSet<Point>> theseLines = new ArrayList<SortedSet<Point>>();
         double slope1, slope2;
-        for (int i = 0; i < rest.length - 2; i++) {
+        for (int i = 0; i < points.length - 2; i++) {
+            SortedSet<Point> line = new TreeSet<Point>();
             line.add(p);
-            line.add(rest[i]);
-            slope1 = p.slopeTo(rest[i]);
-            for (int j = i + 1; j < rest.length; j++) {
-                slope2 = p.slopeTo(rest[j]);
+            line.add(points[i]);
+            slope1 = p.slopeTo(points[i]);
+            for (int j = i + 1; j < points.length; j++) {
+                slope2 = p.slopeTo(points[j]);
                 count++;
                 if (Double.compare(slope1, slope2) == 0) {
-                    line.add(rest[j]);
+                    line.add(points[j]);
                     if (line.size() > 3) theseLines.add(line);
-                    if (j == rest.length - 1) i = rest.length;
+                    if (j == points.length - 1) i = points.length;
                 } else {
                     i = j - 1;
                     break;

@@ -32,7 +32,7 @@ public class LineDetector {
 	 */
 	public static void main(String[] args) {
         LineDetector det = new LineDetector();
-        det.run("mystery10089.txt");
+        det.run("input56.txt");
 	}
 
     /**
@@ -102,7 +102,7 @@ public class LineDetector {
                         //than the current entry, add it otherwise leave the current one there.
                     }
                     if (j == points.length - 1) i = points.length;
-                } else {
+                } else { //if not equal, might as well stop checking as array is sorted by slope.
                     i = j - 1;
                     break;
                 }
