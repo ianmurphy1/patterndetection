@@ -1,10 +1,7 @@
 package arraylistimplementation;
 
 import Point.Point;
-import edu.princeton.cs.introcs.In;
-import edu.princeton.cs.introcs.StdDraw;
-import edu.princeton.cs.introcs.StdOut;
-import edu.princeton.cs.introcs.Stopwatch;
+import edu.princeton.cs.introcs.*;
 
 import java.awt.Color;
 import java.util.ArrayList;
@@ -29,7 +26,7 @@ public class LineDetector {
 	 */
 	public static void main(String[] args) {
 		LineDetector det = new LineDetector();
-        det.run("input56.txt");
+        det.run("input10000.txt");
     }
 
     /**
@@ -44,6 +41,7 @@ public class LineDetector {
             ArrayList<ArrayList<Point>> lns = createLines(points[i], Arrays.copyOfRange(points, (i + 1), points.length));
             if (lns.size() > 0) lines.addAll(lns);
         }
+        StdAudio.play("inputs/success.wav");
         removeDups();
         drawLines();
         StdDraw.show(0); //Turn it back on and show all lines and points

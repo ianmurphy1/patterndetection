@@ -1,10 +1,7 @@
 package hashmapimplementation;
 
 import Point.Point;
-import edu.princeton.cs.introcs.In;
-import edu.princeton.cs.introcs.StdDraw;
-import edu.princeton.cs.introcs.StdOut;
-import edu.princeton.cs.introcs.Stopwatch;
+import edu.princeton.cs.introcs.*;
 
 import java.awt.Color;
 import java.util.Arrays;
@@ -32,7 +29,7 @@ public class LineDetector {
 	 */
 	public static void main(String[] args) {
         LineDetector det = new LineDetector();
-        det.run("input56.txt");
+        det.run("input10000.txt");
 	}
 
     /**
@@ -46,6 +43,7 @@ public class LineDetector {
         for (int i = 0; i < points.length; i++) {
             createLines(points[i], Arrays.copyOfRange(points, i + 1, points.length));
         }
+        StdAudio.play("inputs/success.wav");
         drawLines();
         StdDraw.show(0);
         StdDraw.save("outputs/" + s.replace(".txt", ".png"));
@@ -102,7 +100,8 @@ public class LineDetector {
                         //than the current entry, add it otherwise leave the current one there.
                     }
                     if (j == points.length - 1) i = points.length;
-                } else { //if not equal, might as well stop checking as array is sorted by slope.
+                } else { //if not equal, might as well stop checking as array is sorted by slope
+                         //so no more equal slopes left
                     i = j - 1;
                     break;
                 }
@@ -152,10 +151,14 @@ public class LineDetector {
     }
 
     /**
+     * Method that takes in the slope and a point and works out the
+     * equation of the line, used to have a unique key for the Map.
      *
-     * @param slope
-     * @param p
-     * @return
+     * Returns in the form y = mx + b or x = x;
+     *
+     * @param slope Slope of the line trying to be added to Map
+     * @param p Point on the line being added
+     * @return The equation of the line
      */
     private String equationOfLine(double slope, Point p) {
         double y, x, m, b;
@@ -165,6 +168,6 @@ public class LineDetector {
         b = (m*x) - y;
         if (slope == Double.POSITIVE_INFINITY)
             return "x = " + x;
-        return ("y = " + slope + "x + " + Double.toString(b));
+        return ("y = " + Double.toString(m) + "x + " + Double.toString(b));
     }
 }

@@ -1,15 +1,11 @@
 package setimplementation;
 
 import Point.Point;
-import edu.princeton.cs.introcs.In;
-import edu.princeton.cs.introcs.StdDraw;
-import edu.princeton.cs.introcs.StdOut;
-import edu.princeton.cs.introcs.Stopwatch;
+import edu.princeton.cs.introcs.*;
 
 import java.awt.Color;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
@@ -31,7 +27,7 @@ public class LineDetector {
      */
     public static void main(String[] args) {
         LineDetector det = new LineDetector();
-        det.run("input56.txt");
+        det.run("input10000.txt");
     }
 
     /**
@@ -46,12 +42,13 @@ public class LineDetector {
             ArrayList<SortedSet<Point>> theseLines = createLines(points[i], Arrays.copyOfRange(points, i + 1, points.length));
             if (theseLines.size() > 0) lines.addAll(theseLines);
         }
+        StdAudio.play("inputs/success.wav");
         removeDups();
         drawLines();
         StdDraw.show(0);
         StdDraw.save("outputs/" + a.replace(".txt", ".png"));
         StdOut.println("Number of lines: " + lines.size());
-        StdOut.println("Done in: " + stopwatch.elapsedTime() + "s");
+        StdOut.println("Done in: " + stopwatch + "s");
         StdOut.println("Op Count: " + count);
     }
 
